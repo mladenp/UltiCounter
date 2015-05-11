@@ -1,0 +1,47 @@
+<ion-view view-title="New Counter">
+  <ion-content>
+    <h1>Create new Counter</h1>
+
+    <form name="$parent.newCounter" ng-submit="CreateNewCounter()">
+
+      <label class="item item-input item-floating-label">
+        <span class="input-label">Counter name</span>
+        <input name="name" ng-model="name" type="text" placeholder="Name your counter" required="required">
+      </label>
+
+      <label class="item item-input item-floating-label">
+        <span class="input-label">Initial value</span>
+        <input name="initial" ng-model="initial" type="number" placeholder="0">
+      </label>
+
+      <label class="item item-input item-floating-label">
+        <span class="input-label">Increment</span>
+        <input name="increment" ng-model="increment" type="number" placeholder="Counter increment value">
+      </label>
+
+      <label class="item item-input item-floating-label">
+        <span class="input-label">Max Value</span>
+        <input name="maxValue" ng-model="maxValue" type="number" placeholder="Enter Max counter value">
+      </label>
+
+      <ul class="list">
+
+        <ion-toggle ng-model="location" toggle-class="toggle-calm">Track Count Location</ion-toggle>
+
+        {{ location }}
+
+        <ion-toggle ng-model="sound" toggle-class="toggle-calm">Sound</ion-toggle>
+
+        <ion-toggle ng-model="vibration" toggle-class="toggle-calm">Vibration</ion-toggle>
+
+
+      </ul>
+
+      <button class="button button-large button-positive icon-left ion-plus-circled">
+        Create Counter
+      </button>
+
+    </form>
+
+  </ion-content>
+</ion-view>
