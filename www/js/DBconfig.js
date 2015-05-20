@@ -5,16 +5,16 @@ angular.module('starter.config', [])
             {
                 name: 'counters',
                 columns: [
-                    {name: 'id', type: 'integer primary key'}, // Unique ID of counter
+                    {name: 'id', type: 'integer primary key auto_increment'}, // Unique ID of counter
                     {name: 'name', type: 'text'}, // Descriptiv name
                     {name: 'initial_value', type: 'integer'}, // Starting value of counter (default 0)
                     {name: 'max_value', type: 'integer'}, // Maximum allowed value
                     {name: 'increment', type: 'integer'}, // By how much to increment
                     {name: 'date_created', type: 'integer'}, // Date when counter is first created
                     {name: 'location', type: 'boolean'}, // Should counter log GPS location ?
-                    {name: 'color', type: 'text'}, // Counter color
                     {name: 'sound', type: 'boolean'}, // Should counting make sound ?
                     {name: 'vibrate', type: 'boolean'}, // Should vibrate on count ?
+                    {name: 'color', type: 'text'} // Counter color
                 ]
             },
 

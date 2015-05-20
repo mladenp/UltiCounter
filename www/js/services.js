@@ -86,6 +86,19 @@ angular.module('starter.services', ['starter.config', 'starter.services'])
         return self;
     })
 
+    .factory('NewCounter', function(DB){
+
+        var self = this;
+
+        self.create = function(cntObj){
+            console.log(cntObj);
+            return DB.query('INSERT OR REPLACE INTO counters (name, initial_value, max_value, increment) VALUES ()',
+                [cntObj.name, cntObj.initial, cntObj.maxValue, cntObj.increment, cntObj.location, cntObj.sound, cntObj.vibration]);
+        }
+
+        return self;
+    })
+
     .factory('UCounter', function(){
 
     });

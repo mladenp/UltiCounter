@@ -30,15 +30,38 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('NewCounterCtrl', function($scope) {
+.controller('NewCounterCtrl', function($scope, NewCounter) {
 
       $scope.CreateNewCounter = function(){
-        var cName = $scope.newCounter.name.$viewValue;
-        var cInitial = $scope.newCounter.initial.$viewValue;
-        var cIncrement = $scope.newCounter.increment.$viewValue;
-        var cMaxValue = $scope.newCounter.maxValue.$viewValue;
-        var cLocation = $scope.newCounter.location;
-        console.log($scope.newCounter.location);
+        var name = $scope.newCounter.name.$viewValue;
+        var initial = $scope.newCounter.initial.$viewValue;
+        var maxValue = $scope.newCounter.maxValue.$viewValue;
+        var increment = $scope.newCounter.increment.$viewValue;
+        var dateCreated = new Date.now();
+        var location = $scope.newCounter.location;
+        var sound = $scope.newCounter.sound;
+        var vibration = $scope.newCounter.vibration;
+        //var color = $scope.newCounter.color;
+        var color = "#FFF";
+
+        // Counter object with all arguments
+        var cntObj = {
+          name: name,
+          initial: initial,
+          maxValue: maxValue,
+          increment: increment,
+          dateCreated: dateCreated,
+          location: location,
+          sound: sound,
+          vibration: vibration,
+          color: color
+        };
+
+          NewCounter.create(cntObj).then(function(){
+              console.log("New Counter added");
+          });
+
+
       };
 
 
