@@ -4,25 +4,36 @@
 
     <form name="$parent.newCounter" ng-submit="CreateNewCounter()">
 
-      <label class="item item-input item-floating-label">
+      <label class="item item-input item-stacked-label">
         <span class="input-label">Counter name</span>
         <input name="name" ng-model="name" type="text" placeholder="Name your counter" required="required">
       </label>
 
-      <label class="item item-input item-floating-label">
-        <span class="input-label">Initial value</span>
-        <input name="initial" ng-model="initial" type="number" placeholder="0">
-      </label>
+      <div class="row">
 
-      <label class="item item-input item-floating-label">
-        <span class="input-label">Increment</span>
-        <input name="increment" ng-model="increment" type="number" placeholder="Counter increment value">
-      </label>
+        <div class="col">
+          <label class="item item-input item-stacked-label">
+            <span class="input-label">Initial value</span>
+            <input name="initial" ng-model="initial" type="number" placeholder="default: 0">
+          </label>
+        </div>
 
-      <label class="item item-input item-floating-label">
-        <span class="input-label">Max Value</span>
-        <input name="maxValue" ng-model="maxValue" type="number" placeholder="Enter Max counter value">
-      </label>
+        <div class="col">
+          <label class="item item-input item-stacked-label">
+            <span class="input-label">Increment</span>
+            <input name="increment" ng-model="increment" type="number" placeholder="default: 1">
+          </label>
+        </div>
+
+        <div class="col">
+          <label class="item item-input item-stacked-label">
+            <span class="input-label">Max Value</span>
+            <input name="maxValue" ng-model="maxValue" type="number" placeholder="default: unlimited">
+          </label>
+        </div>
+
+        </div>
+
 
       <ul class="list">
 
@@ -31,10 +42,28 @@
         <ion-toggle ng-model="newCounter.sound" toggle-class="toggle-calm">Sound</ion-toggle>
 
         <ion-toggle ng-model="newCounter.vibration" toggle-class="toggle-calm">Vibration</ion-toggle>
-
       </ul>
 
-      <button class="button button-large button-positive icon-left ion-plus-circled">
+      <div class="list">
+
+        <label class="item item-input item-select">
+          <div class="input-label">
+            Counter color
+          </div>
+          <select>
+            <option>Blue</option>
+            <option selected>Green</option>
+            <option>Red</option>
+          </select>
+        </label>
+
+      </div>
+
+      <button type="reset" ng-click="reset" class="button button-large button-balanced icon-left ion-ios-refresh">
+        Reset
+      </button>
+
+      <button type="submit" class="button button-large button-positive icon-left ion-plus-circled">
         Create Counter
       </button>
 

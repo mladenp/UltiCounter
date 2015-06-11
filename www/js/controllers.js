@@ -33,11 +33,28 @@ angular.module('starter.controllers', [])
 .controller('NewCounterCtrl', function($scope, NewCounter) {
 
       $scope.CreateNewCounter = function(){
+
         var name = $scope.newCounter.name.$viewValue;
-        var initial = $scope.newCounter.initial.$viewValue;
-        var maxValue = $scope.newCounter.maxValue.$viewValue;
-        var increment = $scope.newCounter.increment.$viewValue;
-        var dateCreated = new Date.now();
+
+        if($scope.newCounter.initial.$viewValue !== undefined){
+          var initial = $scope.newCounter.initial.$viewValue;
+        }else{
+          var initial = 0;
+        }
+
+        if($scope.newCounter.maxValue.$viewValue !== undefined){
+          var maxValue = $scope.newCounter.maxValue.$viewValue;
+        }else{
+          var maxValue = 0;
+        }
+
+        if($scope.newCounter.increment.$viewValue !== undefined){
+          var increment = $scope.newCounter.increment.$viewValue;
+        }else{
+          var increment = 1;
+        }
+
+        var dateCreated = Date.now();
         var location = $scope.newCounter.location;
         var sound = $scope.newCounter.sound;
         var vibration = $scope.newCounter.vibration;
@@ -63,6 +80,8 @@ angular.module('starter.controllers', [])
 
 
       };
+
+
 
 
 })

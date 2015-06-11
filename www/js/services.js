@@ -92,7 +92,7 @@ angular.module('starter.services', ['starter.config', 'starter.services'])
 
         self.create = function(cntObj){
             console.log(cntObj);
-            return DB.query('INSERT OR REPLACE INTO counters (name, initial_value, max_value, increment) VALUES ()',
+            return DB.query('INSERT OR REPLACE INTO counters (name, initial_value, max_value, increment, date_created) VALUES ()',
                 [cntObj.name, cntObj.initial, cntObj.maxValue, cntObj.increment, cntObj.location, cntObj.sound, cntObj.vibration]);
         }
 
