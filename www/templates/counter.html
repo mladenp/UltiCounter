@@ -1,5 +1,12 @@
 <ion-view view-title="Counter">
   <ion-content>
-    <h1>Playlist</h1>
+    <h1>{{ counter.name }}</h1>
+
+    <div class="row">
+      <div class="col" ng-click="counterMinus( {{ counter.dateCreated }} )"> <button class="button-light"> - </button> </div>
+      <div class="col">{{ counter.currentValue }}</div>
+      <div class="col" ng-click="counterPlus( {{ counter.dateCreated }} )"> <button class="button-light"> + </button> </div>
+    </div>
+
   </ion-content>
 </ion-view>

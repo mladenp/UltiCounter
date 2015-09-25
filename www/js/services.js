@@ -1,105 +1,118 @@
-angular.module('starter.services', ['starter.config', 'starter.services'])
+angular.module('starter.services', [])
 
-    .factory('DB', function ($q, $http, DB_CONFIG) {
+    .factory('Counter', function ($rootScope, $ionicPlatform) {
 
-        var self = this;
+        function reminderSchedule(reminderID, every, countAtLeast, counterName) {
 
-        self.db = null;
+            var notificationText = "Remember to count at least " + countAtLeast + " " + counterName;
 
-        self.db_open =function(){
-            var def = $q.defer();
-            try{
-                if(window.sqlitePlugin){
-                    self.db = window.sqlitePlugin.openDatabase({name: DB_CONFIG.name, bgType: 1},function(){
-                        def.resolve(true);
-                    });
-                } else {
-                    def.reject();
-                }
-            }catch(e){
-                def.reject(e);
-            }
-            return def.promise;
-        };
-
-        self.init = function () {
-            var def = $q.defer();
-            self.db_open().then(function() {
-                angular.forEach(DB_CONFIG.tables, function (table) {
-                    var columns = [];
-                    angular.forEach(table.columns, function (column) {
-                        columns.push(column.name + ' ' + column.type);
-                    });
-
-                    var query = 'CREATE TABLE IF NOT EXISTS ' + table.name + ' (' + columns.join(',') + ')';
-                    self.query(query);
-                });
-                def.resolve();
+            cordova.plugins.notification.local.schedule({
+                id: reminderID,
+                every: every,
+                text: notificationText
             });
-            return def.promise;
-        };
-
-        self.drop_table = function (tableName) {
-
-            if(tableName){
-                //var query = 'DROP TABLE ' + tableName ;
-                var query = 'DELETE * FROM ' + tableName;
-                self.query(query);
-            }else{
-                // Drop all tables
-                angular.forEach(DB_CONFIG.tables, function (table) {
-                    var query = 'DROP TABLE ' + table.name;
-                    self.query(query);
-                });
-            }
-
-        };
-
-        self.query = function (query, bindings) {
-            bindings = typeof bindings !== 'undefined' ? bindings : [];
-            var deferred = $q.defer();
-
-            self.db.transaction(function (transaction) {
-                transaction.executeSql(query, bindings, function (transaction, result) {
-                    deferred.resolve(result);
-                }, function (transaction, error) {
-                    deferred.reject(error);
-                });
-            });
-
-            return deferred.promise;
-        };
-
-        self.fetchAll = function (result) {
-            var output = [];
-            for (var i = 0; i < result.rows.length; i++) {
-                output.push(result.rows.item(i));
-            }
-            return output;
-        };
-
-        self.fetch = function (result) {
-            return result.rows.item(0);
-        };
-
-
-        return self;
-    })
-
-    .factory('NewCounter', function(DB){
-
-        var self = this;
-
-        self.create = function(cntObj){
-            console.log(cntObj);
-            return DB.query('INSERT OR REPLACE INTO counters (name, initial_value, max_value, increment, date_created) VALUES ()',
-                [cntObj.name, cntObj.initial, cntObj.maxValue, cntObj.increment, cntObj.location, cntObj.sound, cntObj.vibration]);
         }
 
-        return self;
-    })
+        function reminderCancel(reminderID) {
+            cordova.plugins.notification.local.cancel(reminderID, function () {
+                console.log("Notification canceled");
+            });
+        }
 
-    .factory('UCounter', function(){
+        // Create new counter and stringify it into LocalStorage
+        function createCounter(cntObj) {
+
+            var counterString = JSON.stringify(cntObj);
+            var counterStorageID = cntObj.dateCreated;
+            localStorage.setItem(counterStorageID, counterString);
+
+        }
+
+        // Return single counter parsed object
+        function getCounterByID(counterID) {
+            return JSON.parse(localStorage.getItem(counterID));
+        }
+
+        // Loop through whole LocalStorage and return parsed array of objects
+        function getAllCounters() {
+            var localStorageSize = localStorage.length;
+            var countersAll = [];
+
+            for (var i = 0; i < localStorageSize; ++i) {
+                countersAll[i] = localStorage.getItem(localStorage.key(i));
+                countersAll[i] = JSON.parse(countersAll[i]);
+                console.log(countersAll[i]);
+            }
+
+            return countersAll;
+        }
+
+        // Update single counter
+        function updateCount(cntObj) {
+            var counterID = cntObj.dateCreated;
+            var serializedObj = JSON.stringify(cntObj);
+            localStorage.setItem(counterID, serializedObj);
+        }
+
+        function watchLocation() {
+
+            watchPosID = null;
+
+            var onSuccess = function (pos) {
+                console.log("GeoLocation");
+                $rootScope.myLocation = {
+                    latitude: pos.coords.latitude,
+                    longitude: pos.coords.longitude
+                };
+            };
+
+            function onError(error) {
+                console.log(error);
+                window.plugins.toast.showLongTop("You need to turn GPS ON to find your location");
+
+            }
+
+            var geolocArgs = {
+                maximumAge: 8000,
+                timeout: 45000,
+                throttleTime: 8000, // geolocation-throttle.js lib option
+                enableHighAccuracy: true
+            };
+
+            if (watchPosID == null) {
+                var watchPosID = GeolocationThrottle.watchPosition(onSuccess, onError, geolocArgs);
+            }
+
+            // On PAUSE
+            document.addEventListener("pause", onPause, false);
+
+            function onPause() {
+                GeolocationThrottle.clearWatch(watchPosID);
+                console.log("App pause!");
+            }
+
+            // On RESUME
+            document.addEventListener("resume", onResume, false);
+
+            function onResume() {
+                $ionicPlatform.ready(function () {
+                    watchPosID = GeolocationThrottle.watchPosition(onSuccess, onError, geolocArgs);
+                    console.log("on resume");
+                });
+            }
+
+        }
+
+        return {
+            create: createCounter,
+            get: getCounterByID,
+            getAll: getAllCounters,
+            update: updateCount,
+            reminder: reminderSchedule,
+            reminderCancel: reminderCancel,
+            watchLocation: watchLocation
+        }
 
     });
+
 

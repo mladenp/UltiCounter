@@ -1,8 +1,8 @@
 <ion-view view-title="Counters">
   <ion-content>
     <ion-list>
-      <ion-item ng-repeat="playlist in counters" href="#/app/counters/{{playlist.id}}">
-        {{playlist.title}}
+      <ion-item ng-repeat="counter in counters" ui-sref="app.counter({ counterID: counter.dateCreated })">
+        <h2 class="title">{{ counter.name }} - Value: {{ counter.currentValue }}</h2>
       </ion-item>
     </ion-list>
   </ion-content>

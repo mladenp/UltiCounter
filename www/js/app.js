@@ -6,7 +6,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
-    .run(function ($ionicPlatform, DB) {
+    .run(function ($ionicPlatform) {
         $ionicPlatform.ready(function () {
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
             // for form inputs)
@@ -18,15 +18,14 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
                 StatusBar.styleDefault();
             }
 
-            // Database
-            DB.db_open();
-            DB.init();
-
         });
     })
 
 
-    .config(function ($stateProvider, $urlRouterProvider) {
+    .config(function ($stateProvider, $ionicConfigProvider, $urlRouterProvider) {
+
+        $ionicConfigProvider.platform.android.scrolling.jsScrolling(false);
+
 
         $stateProvider
 
@@ -49,6 +48,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
             .state('app.counters', {
                 url: "/counters",
+                cache: false,
                 views: {
                     'menuContent': {
                         templateUrl: "templates/counters.html",
@@ -58,7 +58,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
             })
 
             .state('app.counter', {
-                url: "/counters/:counterID",
+                url: "/counter/:counterID",
+                cache: false,
                 views: {
                     'menuContent': {
                         templateUrl: "templates/counter.html",
